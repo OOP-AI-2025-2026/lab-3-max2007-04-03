@@ -1,40 +1,63 @@
 package org.example.task2;
 
-public class Order {
+/**
+ * Клас Order представляє замовлення клієнта.
+ */
+public final class Order {
 
-    public long id;
-    public String customer;
+    /** Ідентифікатор замовлення. */
+    private final long id;
+    /** Ім'я клієнта. */
+    private final String customer;
 
-    public Order(long id, String customer) {
+    /**
+     * Створює новий об'єкт замовлення.
+     * @param id       ідентифікатор замовлення.
+     * @param customer ім'я клієнта.
+     */
+    public Order(final long id, final String customer) {
         this.id = id;
         this.customer = customer;
     }
 
-    public String formOrderBill(Cart cart) {
+    /**
+     * Повертає ID замовлення.
+     * @return ідентифікатор замовлення.
+     */
+    public long getId() {
+        return id;
+    }
 
+    /**
+     * Повертає ім'я клієнта.
+     * @return ім'я клієнта.
+     */
+    public String getCustomer() {
+        return customer;
+    }
+
+    /**
+     * Формує текстовий рахунок на основі вмісту кошика.
+     * @param cart кошик з товарами.
+     * @return рядкове представлення рахунку.
+     */
+    public String formOrderBill(final Cart cart) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Order number ").append(id).append(" for customer ").append(customer);
+        builder.append("Order number ").append(this.id)
+                .append(" for customer ").append(this.customer);
         builder.append("\n------------------\n");
 
-        double sum = 0.0;
+        Item[] items = cart.getItems();
 
-        for (int i = 0; i < cart.index; i++) {
-
-            sum += cart.contents[i].price;
-
-            builder.append("Item id: ");
-            builder.append(cart.contents[i].id);
-            builder.append(" name: ");
-            builder.append(cart.contents[i].name);
-            builder.append(" price: ");
-            builder.append(cart.contents[i].price);
-            builder.append("\n");
+        for (Item item : items) {
+            builder.append("Item id: ").append(item.getId())
+                    .append(", name: ").append(item.getName())
+                    .append(", price: ").append(item.getPrice())
+                    .append("\n");
         }
 
         builder.append("------------------\n");
-        builder.append("Total sum: ");
-        builder.append(sum);
-
+        builder.append("Total sum: ").append(cart.getTotalPrice());
 
         return builder.toString();
     }
